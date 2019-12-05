@@ -19,8 +19,18 @@ CONFIG_VARS=()
 _ask_var() {
     local var_name=$1
     local default
+    local var_value
     eval "default=\$$var_name"
-    read -e -r -p "$var_name=" -i "$default" "$var_name"
+    if [ "$(uname)" = "Darwin" ]; then
+        _log "Default: $default"
+        read -e -r -p "$var_name=" "$var_name"
+    else
+        read -e -r -p "$var_name=" -i "$default" "$var_name"
+    fi
+    eval "var_value=\$$var_name"
+    if [ -z "$var_value" ]; then
+        eval "$var_name=$default"
+    fi
     CONFIG_VARS+=("$var_name")
 }
 

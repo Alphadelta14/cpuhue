@@ -36,7 +36,7 @@ _get_cpu_1m() {
 # $1 color definition (HUE_HUE_*)
 _set_state() {
     local payload='{'"$1"', "transition": '"$HUE_TRANSITION_TIME"', "bri": 254, "colormode": "xy", "on": true}'
-    curl -X PUT -d "$payload" "$HUE_BRIDGE_BASE/api/$HUE_APP_USERNAME/lights/$HUE_LIGHT_ID/state" > /dev/null
+    curl -s -X PUT -d "$payload" "$HUE_BRIDGE_BASE/api/$HUE_APP_USERNAME/lights/$HUE_LIGHT_ID/state" > /dev/null
 }
 
 
@@ -57,7 +57,8 @@ _main() {
         else
             colordef=$HUE_HUE_THRASH
         fi
-        sleep 60
+        _set_state "$colordef"
+        sleep 15
     done
 }
 
